@@ -11,7 +11,7 @@ public class LowTimeAlert implements Alert {
 
     @Override
     public String getMessage() {
-        return this.message;
+        return message;
     }
 
     @Override

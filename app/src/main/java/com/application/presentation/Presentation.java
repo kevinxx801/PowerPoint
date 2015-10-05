@@ -1,10 +1,12 @@
 package com.application.presentation;
 
 import java.util.ArrayList;
+import com.application.timer.Timer;
 
 public class Presentation {
     ArrayList<Slide> slides;
     Slide currentSlide;
+    Timer PresentationTimer;
 
     public Presentation() {
         //Not sure how we want to handle this, depends on how we get data
@@ -16,18 +18,21 @@ public class Presentation {
     }
 
     public void nextSlide() {
-        int nextSlide = slides.indexOf(this.currentSlide)+1;
-        this.currentSlide = slides.get(nextSlide);
+        int nextSlide = slides.indexOf(currentSlide)+1;
+        currentSlide = slides.get(nextSlide);
     }
 
     public void previousSlide() {
-        int previousSlide = slides.indexOf(this.currentSlide)-1;
-        this.currentSlide = slides.get(previousSlide);
+        int previousSlide = slides.indexOf(currentSlide)-1;
+        currentSlide = slides.get(previousSlide);
+    }
+
+    public Slide getCurrentSlide() {
+        return currentSlide;
     }
 
     public int getCurrentSlideIndex() {
-        int currentSlideIndex = slides.indexOf(this.currentSlide)+1;
-        return currentSlideIndex;
+        return slides.indexOf(currentSlide)+1;
     }
 
     public int getTotalSlideCount() {

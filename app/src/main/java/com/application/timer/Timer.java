@@ -8,7 +8,9 @@ public abstract class Timer {
 
     protected void getTotalTime() {
         //get the total time from settings
+    }
 
+    protected void setTimeLimit() {
         //setTotalTime(time);
     }
 
