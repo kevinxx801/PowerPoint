@@ -16,8 +16,16 @@ public class PowerpointLoader {
 
     private SlideShow ppt;
 
+    public PowerpointLoader(SlideShow slideShow){
+        this.ppt = slideShow;
+    }
+
     public void setPpt( SlideShow ppt) {
         this.ppt = ppt;
+    }
+
+    public int getSlideCount( SlideShow ppt ){
+        return ppt.getNotes().length;
     }
 
     public SlideShow openSlideShow( String filePath ){
@@ -45,13 +53,8 @@ public class PowerpointLoader {
         return getNotesTextArray(ppt, slideNumber)[0].getText();
     }
 
-    public void openResource(){
-        Resources res = Resources.getSystem();
-        SlideShow ppt = null;
-        try {
-            ppt = new SlideShow(new HSLFSlideShow( res.getAssets().open("slideshow1.ppt") ));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public String getNotesString( int slideNumber ){
+        return getNotesTextArray(this.ppt, slideNumber)[0].getText();
     }
+
 }

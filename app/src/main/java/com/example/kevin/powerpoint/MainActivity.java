@@ -1,5 +1,6 @@
 package com.example.kevin.powerpoint;
 
+import android.content.res.Resources;
 import android.media.MediaRecorder;
 
 import android.support.v7.app.AppCompatActivity;
@@ -9,6 +10,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import java.io.IOException;
+
+import org.apache.poi.hslf.HSLFSlideShow;
+import org.apache.poi.hslf.usermodel.SlideShow;
+import com.application.pptLoader.PowerpointLoader;
+import com.application.presentation.Note;
+import com.application.presentation.Presentation;
+import com.application.presentation.Slide;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -20,6 +28,29 @@ public class MainActivity extends AppCompatActivity {
 		// Disable default keys
 		this.setDefaultKeyMode(this.DEFAULT_KEYS_DISABLE);
 		setContentView(R.layout.activity_main);
+
+		Resources res = getResources();
+		SlideShow ppt = null;
+		try {
+			ppt = new SlideShow(new HSLFSlideShow( res.getAssets().open("slideshow1.ppt") ));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		Presentation presentation = new Presentation();
+
+		PowerpointLoader pptLoader = new PowerpointLoader(ppt);
+		String notesString = "";
+
+		for (int i = 0; i < pptLoader.getSlideCount(ppt); i++ ){
+			notesString = pptLoader.getNotesString(i);
+			Note note = new Note();
+			note.setMessage(notesString);
+			Slide slide = new Slide();
+			slide.setNote(note);
+			presentation.addSlide(slide);
+		}
+
 
 		volumeTest = new Thread(){
 			private MediaRecorder mRecorder = null;
@@ -70,6 +101,7 @@ public class MainActivity extends AppCompatActivity {
 			}
 
 		};
+
 
 		volumeTest.start();
         /*
