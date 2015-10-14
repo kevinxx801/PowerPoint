@@ -16,6 +16,10 @@ public class PowerpointLoader {
 
     private SlideShow ppt;
 
+    public PowerpointLoader(){
+        this.ppt = null;
+    }
+
     public PowerpointLoader(SlideShow slideShow){
         this.ppt = slideShow;
     }

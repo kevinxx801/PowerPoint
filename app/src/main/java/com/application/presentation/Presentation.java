@@ -17,6 +17,12 @@ public class Presentation {
         this.slides = new ArrayList<>();
     }
 
+    public void loadPowerpointFromPath( String filePath ){
+        PowerpointLoader pptLoader = new PowerpointLoader();
+        SlideShow ppt = pptLoader.openSlideShow(filePath);
+        loadPowerpoint(ppt);
+    }
+
     public void loadPowerpoint( SlideShow ppt ){
         PowerpointLoader pptLoader = new PowerpointLoader(ppt);
         String notesString = "";
