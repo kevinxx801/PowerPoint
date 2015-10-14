@@ -13,10 +13,7 @@ import java.io.IOException;
 
 import org.apache.poi.hslf.HSLFSlideShow;
 import org.apache.poi.hslf.usermodel.SlideShow;
-import com.application.pptLoader.PowerpointLoader;
-import com.application.presentation.Note;
 import com.application.presentation.Presentation;
-import com.application.presentation.Slide;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -38,20 +35,9 @@ public class MainActivity extends AppCompatActivity {
 		}
 
 		Presentation presentation = new Presentation();
+        presentation.loadPowerpoint(ppt);
 
-		PowerpointLoader pptLoader = new PowerpointLoader(ppt);
-		String notesString = "";
-
-		for (int i = 0; i < pptLoader.getSlideCount(ppt); i++ ){
-			notesString = pptLoader.getNotesString(i);
-			Note note = new Note();
-			note.setMessage(notesString);
-			Slide slide = new Slide();
-			slide.setNote(note);
-			presentation.addSlide(slide);
-		}
-
-
+		/*
 		volumeTest = new Thread(){
 			private MediaRecorder mRecorder = null;
 
@@ -104,6 +90,8 @@ public class MainActivity extends AppCompatActivity {
 
 
 		volumeTest.start();
+		*/
+
         /*
         final Button goToNotesButton = (Button) findViewById(R.id.goToNotes);
         goToNotesButton.setOnClickListener(new Button.OnClickListener() {
