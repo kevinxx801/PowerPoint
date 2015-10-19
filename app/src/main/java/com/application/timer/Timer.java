@@ -2,24 +2,46 @@ package com.application.timer;
 
 import com.application.alert.Alert;
 
-public abstract class Timer {
+public class Timer {
 
+    private long startTime;
     protected int totalTime;
 
-    protected void getTotalTime() {
-        //get the total time from settings
+    public Timer(){
+        startTime = 0;
+    }
+
+    protected String getElapsedTimeString()
+    {
+        if(startTime == 0){
+            return "--";
+        }
+        //Get the current time.
+        long currentTime = System.currentTimeMillis();
+        //Find the elapsed time
+        long elapsed = currentTime - startTime;
+        //Find the elapsed time in minutes and seconds
+        long seconds = elapsed / 1000;
+        long minutes = seconds / 60;
+        seconds = seconds%60;
+        //Format the output
+        String clock = String.format("%d:%02d", minutes, seconds);
+        return clock;
     }
 
     protected void setTimeLimit() {
         //setTotalTime(time);
     }
 
+    //"Stop" the timer.
     protected void stopTimer() {
-        //stop the timer
+        startTime = 0;
     }
 
+    // Can be used to start and restart a timer.
     protected void startTimer() {
-        //start the timer
+        //Start the timer.
+        startTime = System.currentTimeMillis();
     }
 
     protected void throwAlert(Alert alert) {
