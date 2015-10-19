@@ -1,24 +1,20 @@
 package com.example.kevin.powerpoint;
 
 import android.content.res.Resources;
-import android.media.MediaRecorder;
-
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import java.io.IOException;
+import com.application.presentation.Presentation;
 
 import org.apache.poi.hslf.HSLFSlideShow;
 import org.apache.poi.hslf.usermodel.SlideShow;
-import com.application.presentation.Presentation;
+
+import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity {
-
-	private Thread volumeTest;
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -36,61 +32,6 @@ public class MainActivity extends AppCompatActivity {
 
 		Presentation presentation = new Presentation();
         presentation.loadPowerpoint(ppt);
-
-		/*
-		volumeTest = new Thread(){
-			private MediaRecorder mRecorder = null;
-
-			public void startRecorder() {
-				if (mRecorder == null) {
-					mRecorder = new MediaRecorder();
-					mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-					mRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
-					mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
-					mRecorder.setOutputFile("/dev/null");
-					try {
-						mRecorder.prepare();
-					}
-					catch(IOException e) {
-					}
-					mRecorder.start();
-				}
-			}
-
-			public void done() {
-				if (mRecorder != null) {
-					mRecorder.stop();
-					mRecorder.release();
-					mRecorder = null;
-				}
-			}
-
-			public double getAmplitude() {
-				if (mRecorder != null)
-					return  mRecorder.getMaxAmplitude();
-				else
-					return 0;
-
-			}
-
-			public void run()
-			{
-				try {
-					startRecorder();
-					while (true) {
-						android.util.Log.i("TESTING THREAD",String.valueOf(getAmplitude()));
-						Thread.sleep(500);
-					}
-				}catch (InterruptedException ex) {
-					done();
-				}
-			}
-
-		};
-
-
-		volumeTest.start();
-		*/
 
         /*
         final Button goToNotesButton = (Button) findViewById(R.id.goToNotes);
@@ -117,7 +58,6 @@ public class MainActivity extends AppCompatActivity {
 	protected void onDestroy()
 	{
 		super.onDestroy();
-		volumeTest.interrupt();
 	}
 
 	@Override
