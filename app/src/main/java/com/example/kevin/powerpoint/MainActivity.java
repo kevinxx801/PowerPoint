@@ -16,6 +16,7 @@ import com.application.timer.Timer;
 
 import org.apache.poi.hslf.HSLFSlideShow;
 import org.apache.poi.hslf.usermodel.SlideShow;
+import org.w3c.dom.Text;
 
 import java.io.IOException;
 
@@ -27,6 +28,8 @@ public class MainActivity extends AppCompatActivity {
 	private TextView slideTimer;
 	private ProgressBar volumeBar;
 	private VolumeMonitor volumeMonitor;
+	private TextView notes;
+	private Presentation presentation;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -42,9 +45,6 @@ public class MainActivity extends AppCompatActivity {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
-		Presentation presentation = new Presentation();
-        presentation.loadPowerpoint(ppt);
 
 		tSlide = new Timer();
 		tSlide.startTimer();
@@ -78,6 +78,11 @@ public class MainActivity extends AppCompatActivity {
 				volumeHandler.postDelayed(this,100);
 			}
 		});
+
+		presentation = new Presentation();
+		presentation.loadPowerpoint(ppt);
+		notes = (TextView) findViewById(R.id.notes);
+		notes.setText(presentation.getCurrentSlide().getNote().getMessage());
 
         /*
         final Button goToNotesButton = (Button) findViewById(R.id.goToNotes);

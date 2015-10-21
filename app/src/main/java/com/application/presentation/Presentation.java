@@ -35,6 +35,7 @@ public class Presentation {
             slide.setNote(note);
             addSlide(slide);
         }
+        this.currentSlide = slides.get(0);
     }
 
     public void addSlide(Slide slide) {
