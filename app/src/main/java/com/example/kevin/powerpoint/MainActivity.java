@@ -2,12 +2,17 @@ package com.example.kevin.powerpoint;
 
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
+import com.application.monitor.VolumeMonitor;
 import com.application.presentation.Presentation;
+import com.application.timer.Timer;
 
 import org.apache.poi.hslf.HSLFSlideShow;
 import org.apache.poi.hslf.usermodel.SlideShow;
@@ -15,6 +20,14 @@ import org.apache.poi.hslf.usermodel.SlideShow;
 import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity {
+
+	private Timer tSlide;
+	private Timer tPresentation;
+	private TextView totalTimer;
+	private TextView slideTimer;
+	private ProgressBar volumeBar;
+	private VolumeMonitor volumeMonitor;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -32,6 +45,39 @@ public class MainActivity extends AppCompatActivity {
 
 		Presentation presentation = new Presentation();
         presentation.loadPowerpoint(ppt);
+
+		tSlide = new Timer();
+		tSlide.startTimer();
+
+		tPresentation = new Timer();
+		tPresentation.startTimer();
+
+		slideTimer = (TextView) findViewById(R.id.slideTimer);
+		totalTimer = (TextView) findViewById(R.id.totalTimer);
+
+		final Handler handler=new Handler();
+		handler.post(new Runnable(){
+
+			@Override
+			public void run() {
+				slideTimer.setText(tSlide.getElapsedTimeString());
+				totalTimer.setText(tPresentation.getElapsedTimeString());
+				handler.postDelayed(this,100);
+			}
+		});
+
+		volumeBar = (ProgressBar) findViewById(R.id.volumeBar);
+
+		volumeMonitor = new VolumeMonitor();
+		final Handler volumeHandler=new Handler();
+		volumeHandler.post(new Runnable(){
+
+			@Override
+			public void run() {
+				volumeBar.setProgress((int)volumeMonitor.getAmplitude());
+				volumeHandler.postDelayed(this,100);
+			}
+		});
 
         /*
         final Button goToNotesButton = (Button) findViewById(R.id.goToNotes);

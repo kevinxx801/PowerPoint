@@ -8,19 +8,18 @@ import java.io.IOException;
  * VolumeMonitor monitors the android devices microphone and updates
  * a volumeReceiver with the current mic amplitude level
  */
-public class VolumeMonitor extends Thread {
+public class VolumeMonitor{
 
     private MediaRecorder mRecorder = null;
-    private VolumeReceiver volumeReceiver;
-    private static final int PAUSE_AMOUNT = 500;
+    private static final int PAUSE_AMOUNT = 10;
 
     /**
      * Constructor for the VolumeMonitor thread
      *
      * @param volumeReceiver - the object that receives the update
      */
-    public VolumeMonitor(VolumeReceiver volumeReceiver) {
-        this.volumeReceiver = volumeReceiver;
+    public VolumeMonitor() {
+        startRecorder();
     }
 
     private void startRecorder() {
@@ -52,23 +51,11 @@ public class VolumeMonitor extends Thread {
     /**
      * @return - the amplitude for the recorder
      */
-    private double getAmplitude() {
+    public double getAmplitude() {
         if (mRecorder != null)
             return mRecorder.getMaxAmplitude();
         else
             return 0;
 
-    }
-
-    public void run() {
-        try {
-            startRecorder();
-            while (true) {
-                volumeReceiver.receiveVolumeUpdate((int) getAmplitude());
-                Thread.sleep(PAUSE_AMOUNT);
-            }
-        } catch (InterruptedException ex) {
-            done();
-        }
     }
 }

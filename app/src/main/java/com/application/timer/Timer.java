@@ -11,7 +11,7 @@ public class Timer {
         startTime = 0;
     }
 
-    protected String getElapsedTimeString()
+    public String getElapsedTimeString()
     {
         if(startTime == 0){
             return "--";
@@ -39,7 +39,7 @@ public class Timer {
     }
 
     // Can be used to start and restart a timer.
-    protected void startTimer() {
+    public void startTimer() {
         //Start the timer.
         startTime = System.currentTimeMillis();
     }
