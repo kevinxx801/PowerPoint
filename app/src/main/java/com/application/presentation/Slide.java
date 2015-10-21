@@ -10,7 +10,7 @@ public class Slide {
     //somehow represent content
 
     public void setNote(Note note) {
-
+        this.note = note;
     }
 
     public Note getNote() {
