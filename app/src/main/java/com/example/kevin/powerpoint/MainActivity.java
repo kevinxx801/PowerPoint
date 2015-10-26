@@ -16,7 +16,6 @@ import com.application.timer.Timer;
 
 import org.apache.poi.hslf.HSLFSlideShow;
 import org.apache.poi.hslf.usermodel.SlideShow;
-import org.w3c.dom.Text;
 
 import java.io.IOException;
 
@@ -26,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
 	private Timer tPresentation;
 	private TextView totalTimer;
 	private TextView slideTimer;
+	private TextView slideCount;
 	private ProgressBar volumeBar;
 	private VolumeMonitor volumeMonitor;
 	private TextView notes;
@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
 
 		slideTimer = (TextView) findViewById(R.id.slideTimer);
 		totalTimer = (TextView) findViewById(R.id.totalTimer);
-
+		slideCount = (TextView) findViewById(R.id.slideCount);
 		final Handler handler=new Handler();
 		handler.post(new Runnable(){
 
@@ -83,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
 		presentation.loadPowerpoint(ppt);
 		notes = (TextView) findViewById(R.id.notes);
 		notes.setText(presentation.getCurrentSlide().getNote().getMessage());
+		slideCount.setText(presentation.getCurrentSlideIndex() + "/" + presentation.getTotalSlideCount());
 
         /*
         final Button goToNotesButton = (Button) findViewById(R.id.goToNotes);
@@ -134,7 +135,27 @@ public class MainActivity extends AppCompatActivity {
 	}
 
 
+	private void nextSlide() {
+		presentation.nextSlide();
+		tSlide.startTimer();
+		slideCount.setText(presentation.getCurrentSlideIndex() + "/" + presentation.getTotalSlideCount());
+		notes.setText(presentation.getCurrentSlide().getNote().getMessage());
+	}
 
+	private void prevSlide() {
+		presentation.previousSlide();
+		tSlide.startTimer();
+		slideCount.setText(presentation.getCurrentSlideIndex() + "/" + presentation.getTotalSlideCount());
+		notes.setText(presentation.getCurrentSlide().getNote().getMessage());
+	}
+
+	private void scrollDown() {
+
+	}
+
+	private void goBack() {
+
+	}
 
 	@Override
 	public void onAttachedToWindow() {
@@ -144,7 +165,28 @@ public class MainActivity extends AppCompatActivity {
 	@Override
 	public boolean onKeyUp(int keyCode, KeyEvent event) {
 
-
+		// KC 22 S 257  next slide
+		// KC 21 S 257  prev slide
+		// KC 66 S 257  scroll
+		// KC 4 S 257   back
+		if (event.getSource() == 257) {
+			switch (keyCode) {
+				case 22:
+					nextSlide();
+					break;
+				case 21:
+					prevSlide();
+					break;
+				case 66:
+					scrollDown();
+					break;
+				case 4:
+					goBack();
+					break;
+				default:
+					break;
+			}
+		}
 		android.util.Log.i("TESTING BUTTONS", "Key Code: " + keyCode + "Source: " + event.getSource());
 		if(keyCode == KeyEvent.KEYCODE_HOME)
 		{
