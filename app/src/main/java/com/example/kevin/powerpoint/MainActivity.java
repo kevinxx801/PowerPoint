@@ -1,5 +1,6 @@
 package com.example.kevin.powerpoint;
 
+import android.content.Context;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
@@ -8,6 +9,7 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ProgressBar;
+import android.widget.Scroller;
 import android.widget.TextView;
 
 import com.application.monitor.VolumeMonitor;
@@ -30,6 +32,8 @@ public class MainActivity extends AppCompatActivity {
 	private VolumeMonitor volumeMonitor;
 	private TextView notes;
 	private Presentation presentation;
+	private Scroller scroller;
+	private static final int SCROLL_AMOUNT = 60;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
 		Resources res = getResources();
 		SlideShow ppt = null;
 		try {
-			ppt = new SlideShow(new HSLFSlideShow( res.getAssets().open("slideshow1.ppt") ));
+			ppt = new SlideShow(new HSLFSlideShow( res.getAssets().open("Presentation1.ppt") ));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -81,8 +85,10 @@ public class MainActivity extends AppCompatActivity {
 
 		presentation = new Presentation();
 		presentation.loadPowerpoint(ppt);
+		scroller = new Scroller(getApplicationContext());
 		notes = (TextView) findViewById(R.id.notes);
 		notes.setText(presentation.getCurrentSlide().getNote().getMessage());
+		notes.setScroller(scroller);
 		slideCount.setText(presentation.getCurrentSlideIndex() + "/" + presentation.getTotalSlideCount());
 
         /*
@@ -140,6 +146,7 @@ public class MainActivity extends AppCompatActivity {
 		tSlide.startTimer();
 		slideCount.setText(presentation.getCurrentSlideIndex() + "/" + presentation.getTotalSlideCount());
 		notes.setText(presentation.getCurrentSlide().getNote().getMessage());
+		scroller.startScroll(0,0,0,0,100);
 	}
 
 	private void prevSlide() {
@@ -147,10 +154,13 @@ public class MainActivity extends AppCompatActivity {
 		tSlide.startTimer();
 		slideCount.setText(presentation.getCurrentSlideIndex() + "/" + presentation.getTotalSlideCount());
 		notes.setText(presentation.getCurrentSlide().getNote().getMessage());
+		scroller.startScroll(0,0,0,0,100);
 	}
 
 	private void scrollDown() {
 
+		notes.setText(presentation.getCurrentSlide().getNote().getMessage());
+		scroller.startScroll(0,scroller.getCurrY(),0,SCROLL_AMOUNT,500);
 	}
 
 	private void goBack() {
