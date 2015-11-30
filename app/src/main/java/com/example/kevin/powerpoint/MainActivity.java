@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
 		slideTimer = (TextView) findViewById(R.id.slideTimer);
 		totalTimer = (TextView) findViewById(R.id.totalTimer);
 		slideCount = (TextView) findViewById(R.id.slideCount);
-		final Handler handler=new Handler();
+
 
 
 
