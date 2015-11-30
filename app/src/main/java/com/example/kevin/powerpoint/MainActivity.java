@@ -1,5 +1,8 @@
 package com.example.kevin.powerpoint;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
@@ -10,6 +13,8 @@ import android.view.MenuItem;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.application.alert.Alert;
+import com.application.alert.LowTimeAlert;
 import com.application.monitor.VolumeMonitor;
 import com.application.presentation.Presentation;
 import com.application.timer.Timer;
@@ -23,7 +28,8 @@ import java.io.IOException;
 public class MainActivity extends AppCompatActivity {
 
 	private Timer tSlide;
-	private Timer tPresentation;
+	public static Timer tPresentation;
+	private Alert tAlert;
 	private TextView totalTimer;
 	private TextView slideTimer;
 	private ProgressBar volumeBar;
@@ -46,16 +52,21 @@ public class MainActivity extends AppCompatActivity {
 			e.printStackTrace();
 		}
 
-		tSlide = new Timer();
+		tSlide = new Timer(false, null);
 		tSlide.startTimer();
 
-		tPresentation = new Timer();
+
+		tPresentation = new Timer(true, LowTimeAlert.TimeAlert.Visual);
+		tPresentation.setTimeLimit(60000); // 1 minute in milliseconds
 		tPresentation.startTimer();
 
 		slideTimer = (TextView) findViewById(R.id.slideTimer);
 		totalTimer = (TextView) findViewById(R.id.totalTimer);
 
-		final Handler handler=new Handler();
+
+
+
+		final Handler handler = new Handler();
 		handler.post(new Runnable(){
 
 			@Override
@@ -63,13 +74,22 @@ public class MainActivity extends AppCompatActivity {
 				slideTimer.setText(tSlide.getElapsedTimeString());
 				totalTimer.setText(tPresentation.getElapsedTimeString());
 				handler.postDelayed(this,100);
+				if((tPresentation.getElapsedTime() >= tPresentation.getAlertTime()) &&
+						!tPresentation.getAlertOccurance()){
+					sendAlert(tPresentation.getAlertType());
+					tPresentation.setAlertOccurance(true);
+				}
 			}
 		});
+
+
+
+
 
 		volumeBar = (ProgressBar) findViewById(R.id.volumeBar);
 
 		volumeMonitor = new VolumeMonitor();
-		final Handler volumeHandler=new Handler();
+		final Handler volumeHandler = new Handler();
 		volumeHandler.post(new Runnable(){
 
 			@Override
@@ -150,6 +170,74 @@ public class MainActivity extends AppCompatActivity {
 		{
 		}
 		return true;
+	}
+
+	private void makeVisualAlert(){
+		AlertDialog.Builder dialog = new AlertDialog.Builder(this)
+				.setTitle("Low Time")
+				.setMessage(tPresentation.timeLeftString() + " remaining to finish");
+		final AlertDialog alert = dialog.create();
+
+		alert.show();
+		final Handler alertHandler  = new Handler();
+		final Runnable alertRunnable = new Runnable() {
+			@Override
+			public void run() {
+				if (alert.isShowing()) {
+					alert.dismiss();
+				}
+			}
+		};
+		alert.setOnDismissListener(new DialogInterface.OnDismissListener() {
+			@Override
+			public void onDismiss(DialogInterface dialog) {
+				alertHandler.removeCallbacks(alertRunnable);
+			}
+		});
+
+		alertHandler.postDelayed(alertRunnable, 10000);
+	}
+
+
+	private void makeAudioAlert(){
+		AlertDialog.Builder dialog = new AlertDialog.Builder(this)
+				.setTitle("Low Time")
+				.setMessage(tPresentation.timeLeftString() + " remaining to finish");
+		final AlertDialog alert = dialog.create();
+
+		alert.show();
+		final Handler alertHandler  = new Handler();
+		final Runnable alertRunnable = new Runnable() {
+			@Override
+			public void run() {
+				if (alert.isShowing()) {
+					alert.dismiss();
+				}
+			}
+		};
+		alert.setOnDismissListener(new DialogInterface.OnDismissListener() {
+			@Override
+			public void onDismiss(DialogInterface dialog) {
+				alertHandler.removeCallbacks(alertRunnable);
+			}
+		});
+
+		alertHandler.postDelayed(alertRunnable, 10000);
+	}
+
+
+	private void sendAlert(LowTimeAlert.TimeAlert alertType){
+		if(alertType == LowTimeAlert.TimeAlert.Visual){
+			makeVisualAlert();
+		} else if(alertType == LowTimeAlert.TimeAlert.Audio){
+			makeAudioAlert();
+		} else {
+			return;
+		}
+	}
+
+	public Context getThis(){
+		return this;
 	}
 
 }
