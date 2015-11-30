@@ -19,18 +19,23 @@
         android:progress="4000"
         android:indeterminate="false" />
 
-    <TextView
+    <ScrollView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="notes lorem  ipsum"
-        android:id="@+id/notes"
+        android:scrollbars="vertical"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_above="@+id/volumeBar"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:layout_below="@+id/slideTimer" />
+        android:layout_below="@+id/slideTimer">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="notes lorem  ipsum"
+        android:id="@+id/notes"/>
+    </ScrollView>
 
     <TextView
         android:layout_width="wrap_content"
@@ -67,16 +72,16 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Slide"
+        android:text="Total"
         android:id="@+id/textView"
-        android:layout_above="@+id/slideTimer"
+        android:layout_alignTop="@+id/slideTimer"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Total"
+        android:text="Slide"
         android:id="@+id/textView2"
         android:layout_above="@+id/notes"
         android:layout_alignParentLeft="true"

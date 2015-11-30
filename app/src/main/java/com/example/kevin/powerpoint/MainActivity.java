@@ -3,6 +3,7 @@ package com.example.kevin.powerpoint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Context;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
@@ -11,6 +12,7 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ProgressBar;
+import android.widget.Scroller;
 import android.widget.TextView;
 
 import com.application.alert.Alert;
@@ -21,7 +23,6 @@ import com.application.timer.Timer;
 
 import org.apache.poi.hslf.HSLFSlideShow;
 import org.apache.poi.hslf.usermodel.SlideShow;
-import org.w3c.dom.Text;
 
 import java.io.IOException;
 
@@ -32,10 +33,13 @@ public class MainActivity extends AppCompatActivity {
 	private Alert tAlert;
 	private TextView totalTimer;
 	private TextView slideTimer;
+	private TextView slideCount;
 	private ProgressBar volumeBar;
 	private VolumeMonitor volumeMonitor;
 	private TextView notes;
 	private Presentation presentation;
+	private Scroller scroller;
+	private static final int SCROLL_AMOUNT = 60;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
 		Resources res = getResources();
 		SlideShow ppt = null;
 		try {
-			ppt = new SlideShow(new HSLFSlideShow( res.getAssets().open("slideshow1.ppt") ));
+			ppt = new SlideShow(new HSLFSlideShow( res.getAssets().open("Presentation1.ppt") ));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -62,6 +66,8 @@ public class MainActivity extends AppCompatActivity {
 
 		slideTimer = (TextView) findViewById(R.id.slideTimer);
 		totalTimer = (TextView) findViewById(R.id.totalTimer);
+		slideCount = (TextView) findViewById(R.id.slideCount);
+		final Handler handler=new Handler();
 
 
 
@@ -101,8 +107,11 @@ public class MainActivity extends AppCompatActivity {
 
 		presentation = new Presentation();
 		presentation.loadPowerpoint(ppt);
+		scroller = new Scroller(getApplicationContext());
 		notes = (TextView) findViewById(R.id.notes);
 		notes.setText(presentation.getCurrentSlide().getNote().getMessage());
+		notes.setScroller(scroller);
+		slideCount.setText(presentation.getCurrentSlideIndex() + "/" + presentation.getTotalSlideCount());
 
         /*
         final Button goToNotesButton = (Button) findViewById(R.id.goToNotes);
@@ -154,7 +163,31 @@ public class MainActivity extends AppCompatActivity {
 	}
 
 
+	private void nextSlide() {
+		presentation.nextSlide();
+		tSlide.startTimer();
+		slideCount.setText(presentation.getCurrentSlideIndex() + "/" + presentation.getTotalSlideCount());
+		notes.setText(presentation.getCurrentSlide().getNote().getMessage());
+		scroller.startScroll(0,0,0,0,100);
+	}
 
+	private void prevSlide() {
+		presentation.previousSlide();
+		tSlide.startTimer();
+		slideCount.setText(presentation.getCurrentSlideIndex() + "/" + presentation.getTotalSlideCount());
+		notes.setText(presentation.getCurrentSlide().getNote().getMessage());
+		scroller.startScroll(0,0,0,0,100);
+	}
+
+	private void scrollDown() {
+
+		notes.setText(presentation.getCurrentSlide().getNote().getMessage());
+		scroller.startScroll(0,scroller.getCurrY(),0,SCROLL_AMOUNT,500);
+	}
+
+	private void goBack() {
+
+	}
 
 	@Override
 	public void onAttachedToWindow() {
@@ -164,7 +197,28 @@ public class MainActivity extends AppCompatActivity {
 	@Override
 	public boolean onKeyUp(int keyCode, KeyEvent event) {
 
-
+		// KC 22 S 257  next slide
+		// KC 21 S 257  prev slide
+		// KC 66 S 257  scroll
+		// KC 4 S 257   back
+		if (event.getSource() == 257) {
+			switch (keyCode) {
+				case 22:
+					nextSlide();
+					break;
+				case 21:
+					prevSlide();
+					break;
+				case 66:
+					scrollDown();
+					break;
+				case 4:
+					goBack();
+					break;
+				default:
+					break;
+			}
+		}
 		android.util.Log.i("TESTING BUTTONS", "Key Code: " + keyCode + "Source: " + event.getSource());
 		if(keyCode == KeyEvent.KEYCODE_HOME)
 		{
