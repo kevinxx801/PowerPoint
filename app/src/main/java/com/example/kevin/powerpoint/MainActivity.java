@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
 		super.onCreate(savedInstanceState);
 		// Disable default keys
 		this.setDefaultKeyMode(this.DEFAULT_KEYS_DISABLE);
-		setContentView(R.layout.activity_main);
+		setContentView(R.layout.presentation_main);
 
 		Resources res = getResources();
 		SlideShow ppt = null;
