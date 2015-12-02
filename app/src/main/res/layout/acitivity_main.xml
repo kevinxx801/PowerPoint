@@ -8,7 +8,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Present"
-        android:id="@+id/button"
+        android:id="@+id/present"
         android:layout_gravity="center_vertical"
         android:layout_centerVertical="true"
         android:layout_alignParentLeft="true"
@@ -18,11 +18,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Settings"
-        android:id="@+id/button2"
+        android:id="@+id/settings"
         android:layout_gravity="center_vertical"
-        android:layout_alignTop="@+id/button"
-        android:layout_toRightOf="@+id/button"
-        android:layout_toEndOf="@+id/button" />
+        android:layout_alignTop="@+id/present"
+        android:layout_toRightOf="@+id/present"
+        android:layout_toEndOf="@+id/present" />
 
 
 </RelativeLayout>
